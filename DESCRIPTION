@@ -1,0 +1,11 @@
+Package: RnaSeqTutorial
+Title: RNA-Seq Tutorial (EBI Cambridge UK, October 2011)
+Version: 0.0.6
+Author: Nicolas Delhomme, Ismael Padioleau
+Description: A selection of RNA-Seq data to get familiar with the related Bioconductor core packages and the easyRNASeq package.
+Maintainer: Nicolas Delhomme <delhomme@embl.de>
+License: Artistic-2.0
+Depends: R (>= 2.15.0), methods, easyRNASeq
+Suggests: Rsamtools, ShortRead, BSgenome.Dmelanogaster.UCSC.dm3, GenomicRanges,
+          biomaRt, genomeIntervals
+biocViews: ExperimentData, RNAseqData
