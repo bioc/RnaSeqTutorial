@@ -1,0 +1,10 @@
+CHANGES IN VERSION 0.0.10
+-------------------------
+
+    o Introduced the NEWS file.
+
+    o Some vignette discrepancies have been corrected. 
+    Thanks to Richard Friedman for spotting them.
+
+    o Added the easyRNASeq CITATION file and a reference
+    in the vignette.

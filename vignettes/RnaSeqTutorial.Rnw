@@ -50,7 +50,7 @@ reads coverage, and assign counts to genic features of interest.
 \newline
 
 In the second part, we will see how this process can be simplified by
-the use of the \Rpackage{easyRNASeq} package and how more advanced
+the use of the \Rpackage{easyRNASeq} package \citep{Delhomme:2012p4678} and how more advanced
 pre-processing can be performed, such as \emph{de-multiplexing},
 \emph{RPKM} ``correction'' or normalization using the \Rpackage{DESeq}
 or \Rpackage{edgeR} packages. 
@@ -706,8 +706,9 @@ ideally fail-safe. Rationalizing and automating that task was our
 motivation to build the \Rpackage{easyRNASeq} package. However, keep
 in mind that getting the proper annotation for your analysis is an
 essential step, as well when using the \Rpackage{easyRNASeq}
-package. You'll probably want to avoid counting the same read multiple
-times, \textit{e.g.} in overlapping exons.
+package \citep{Delhomme:2012p4678}. You'll probably want to avoid
+counting the same read multiple times, \textit{e.g.} in overlapping
+exons. 
 
 <<clean up, echo=FALSE>>=
 rm(aln,chrSizes)
@@ -758,7 +759,36 @@ dim(count.table)
 
 That is all. In one command, you got the count table for your 4 samples!
 
+\paragraph{Warnings}
+\label{p:W}
+As you could see when running the previous example,  warnings were
+emitted and quite rightly so. 
+\begin{enumerate}
+\item about the annotation:
+The annotation we are using here is
+redundant and this at two levels. First, some exons overlap. These are
+alternative exons from different transcript isoforms. Second, the
+annotation contains the information about all the possible different
+transcript isoforms. This means that some exons are
+duplicated. Therefore counting by exons or transcripts using these
+annotation will result in counting some of the reads several
+times. There might be reasons one might want to do that, but as it is
+probably not what you want when performing an RNA-Seq analysis, the
+warning is emitted. As this can be a very significant source of error,
+all the examples here will emit this warning. The ideal
+solution is to provide an annotation object that contains no
+overlapping features. The \Rfunction{disjoin} function from the
+\Rpackage{IRanges} package offers a way to achieve this.
+\item about potential naming issue in the input file:
+It is (sadly) very frequent that the sequencing facilities use
+different naming conventions for the chromosomes they report in the
+alignment files. It is therefore very frequent that the annotation
+provided to easyRNASeq uses different chromosome names than the
+alignment file. These warnings are there to inform you about this
+issue.
+\end{enumerate}
 
+\paragraph{Details}
 The \Rfunction{easyRNASeq} function currently accepts the following
 \Robject{annotationMethods}: 
 \begin{itemize}
@@ -824,6 +854,16 @@ class \Rclass{RNAseq} .
 \textbf{Q13}: Summarize the counts per transcript and geneModels.
 \label{question13}
 \newpage
+
+\paragraph{Finally...}
+If you find \Rpackage{easyRNASeq} useful and apply it in the
+frame of your research for a publication, please cite it:
+
+\subparagraph{}
+easyRNASeq: a bioconductor package for processing RNA-Seq data\\
+Nicolas Delhomme; Ismael Padioleau; Eileen E. Furlong; Lars M. Steinmetz\\
+Bioinformatics 2012; doi: 10.1093/bioinformatics/bts477\\
+
 \section{Advanced usage}
 
 In this section we will discuss about more advanced RNA-Seq
@@ -1035,7 +1075,7 @@ comments and patience, as well as for organizing the course.
 
 \newpage
 
-\bibliographystyle{natbib}
+\bibliographystyle{plainnat}
 
 \bibliography{RnaSeqTutorial}
 
