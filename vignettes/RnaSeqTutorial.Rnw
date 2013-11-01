@@ -236,14 +236,14 @@ alignments, an additional motivation to use the
 
 <<Reading a Tophat BAM file>>=
 library(GenomicRanges)
-aln3 <- readGappedAlignments(
-                             system.file("extdata",
-                                         "gapped.bam",
-                                         package="RnaSeqTutorial"),
-                             format="BAM")
+aln3 <- readGAlignments(
+                        system.file("extdata",
+                                    "gapped.bam",
+                                    package="RnaSeqTutorial"),
+                        format="BAM")
 @ 
 
-The generated object of class \Rclass{GappedAlignments}, is very
+The generated object of class \Rclass{GAlignments}, is very
 different from the \Rclass{AlignedRead} class objects you have seen so
 far.
 \newline
@@ -1092,7 +1092,7 @@ comments and patience, as well as for organizing the course.
 \Robject{aln2}, the \emph{chastity filtered} reads have been ignored.
 
 \item \textbf{Q2}: section \ref{question2}, page \pageref{question2}: The \Robject{aln3}, of class
-\Rclass{GappedAlignments} from the \Rpackage{GenomicRanges} package
+\Rclass{GAlignments} from the \Rpackage{GenomicRanges} package
 does not contain any sequence, quality or id information.
 
 \item \textbf{Q3}: section \ref{question3}, page \pageref{question3}:
