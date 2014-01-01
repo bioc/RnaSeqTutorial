@@ -1,3 +1,14 @@
+CHANGES IN VERSION 0.0.16
+-------------------------
+
+	o The BAM files have now a correct header
+
+	o A Flybase v5.52 gff3 file, filtered for
+	mRNA and exon types has been added
+
+	o The annot.gff file it replaces has been
+	deprecated
+
 CHANGES IN VERSION 0.0.10
 -------------------------
 

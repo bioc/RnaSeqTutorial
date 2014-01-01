@@ -11,7 +11,6 @@
 	data(gAnnot)
 }
 \seealso{
-  The package vignette: RNAseq.use.case.
+  The package vignette: RnaSeqTutorial.
 }
 \keyword{datasets}
-
