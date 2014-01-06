@@ -42,7 +42,7 @@ models, \emph{etc.}
 In the first part, the data will be read in R using Bioconductor
 \citep{Gentleman:2004p2013} \Rpackage{ShortRead}
 \citep{Morgan:2009p739}, \Rpackage{Rsamtools} and
-\Rpackage{GenomicRanges} packages. Then, annotation will be retrieved
+\Rpackage{GenomicAlignments} packages. Then, annotation will be retrieved
 using the \Rpackage{biomaRt} \citep{Durinck:2005p1990} and
 \Rpackage{genomeIntervals} packages. Finally the \Rpackage{IRanges}
 and \Rpackage{GenomicFeatures} packages will be used to define the
@@ -104,7 +104,7 @@ library(RnaSeqTutorial)
 There are different ways to read in NGS data into R, depending on the
 ``raw'' data format at hand. The next paragraphs will present three
 different approaches, introducing the \Rpackage{ShortRead},
-\Rpackage{Rsamtools} and \Rpackage{GenomicRanges} packages capabilities.
+\Rpackage{Rsamtools} and \Rpackage{GenomicAlignments} packages capabilities.
 
 \paragraph{ShortRead}
 
@@ -221,21 +221,21 @@ on their flag, cigar string, \emph{etc.}; see the
 \Rfunction{ScanBamParam} to display which fields of the BAM file are
 to be retrieved.
 
-\paragraph{GenomicRanges}
+\paragraph{GenomicAlignments}
 Finally, the last example to load data uses the
-\Rpackage{GenomicRanges} package. With the increasing read length, it
+\Rpackage{GenomicAlignments} package. With the increasing read length, it
 became possible to reliably map exon-exon junctions and therefore to
 report \emph{gapped alignments} and alternative transcripts. Tools such
 as TopHat \citep{Trapnell:2009p156} have especially been developed for that
-purpose. The \Rpackage{GenomicRanges} package was implemented to deal with
+purpose. The \Rpackage{GenomicAlignments} package was implemented to deal with
 this new kind of data. As of today, most of the common aligners such as
 bowtie \citep{Langmead:2009p309}, bwa \citep{Li:2009p1660}, novoalign
 \citep{ref:Novoalign} or GSNAP \citep{Wu:2010p2657} supports gap
 alignments, an additional motivation to use the
-\Rpackage{GenomicRanges} package functionalities.
+\Rpackage{GenomicAlignments} package functionalities.
 
 <<Reading a Tophat BAM file>>=
-library(GenomicRanges)
+library(GenomicAlignments)
 aln3 <- readGAlignments(
                         system.file("extdata",
                                     "gapped.bam",
@@ -1092,7 +1092,7 @@ comments and patience, as well as for organizing the course.
 \Robject{aln2}, the \emph{chastity filtered} reads have been ignored.
 
 \item \textbf{Q2}: section \ref{question2}, page \pageref{question2}: The \Robject{aln3}, of class
-\Rclass{GAlignments} from the \Rpackage{GenomicRanges} package
+\Rclass{GAlignments} from the \Rpackage{GenomicAlignments} package
 does not contain any sequence, quality or id information.
 
 \item \textbf{Q3}: section \ref{question3}, page \pageref{question3}:
