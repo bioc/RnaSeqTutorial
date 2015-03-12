@@ -239,8 +239,7 @@ library(GenomicAlignments)
 aln3 <- readGAlignments(
                         system.file("extdata",
                                     "gapped.bam",
-                                    package="RnaSeqTutorial"),
-                        format="BAM")
+                                    package="RnaSeqTutorial"))
 @ 
 
 The generated object of class \Rclass{GAlignments}, is very
