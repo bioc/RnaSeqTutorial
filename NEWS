@@ -1,3 +1,8 @@
+CHANGES IN VERSION 0.5.3
+-------------------------
+
+  o Fixed a number of issues due to API changes
+
 CHANGES IN VERSION 0.0.16
 -------------------------
 
@@ -14,7 +19,7 @@ CHANGES IN VERSION 0.0.10
 
     o Introduced the NEWS file.
 
-    o Some vignette discrepancies have been corrected. 
+    o Some vignette discrepancies have been corrected.
     Thanks to Richard Friedman for spotting them.
 
     o Added the easyRNASeq CITATION file and a reference

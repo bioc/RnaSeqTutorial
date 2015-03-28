@@ -664,7 +664,8 @@ exon.coverage<-aggregate(
                          ranges(exon.range2),
                          sum)
 
-exon.coverage <- ceiling(exon.coverage/unique(width(aln)))
+exon.coverage <- ceiling(unlist(exon.coverage)/unique(width(aln)))
+names(exon.coverage) <- exon.range2$exon
 @
 
 <<Ex. tr. cov.p.2, eval=FALSE>>=
@@ -959,7 +960,7 @@ library(rtracklayer)
 window.size <- 51
 rngs <- breakInChunks(length(cover[["chr4"]]),window.size)
 vals <- viewSums(Views(cover[["chr4"]],rngs))
-width(rngs)[width(rngs) != width(rngs)[1]] <- width(rngs)[1]
+#width(rngs)[width(rngs) != width(rngs)[1]] <- width(rngs)[1]
 silent <- export(
                  RangedData(rngs,score=vals,universe="Dmelanogaster",space="chr4"),
                  con="chr4.wig"
@@ -977,7 +978,7 @@ exon.RPKM <- easyRNASeq(system.file(
                                     "extdata",
                                     package="RnaSeqTutorial"),
                         organism="Dmelanogaster",
-                        chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                        chr.sizes=seqlengths(Dmelanogaster),
                         readLength=36L,
                         annotationMethod="rda",
                         annotationFile=system.file(
