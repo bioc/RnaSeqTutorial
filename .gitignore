@@ -1,0 +1,7 @@
+.Rbuildignore
+.Rproj.user
+.Rhistory
+.RData
+RnaSeqTutorial.Rproj
+data/
+inst/extdata/

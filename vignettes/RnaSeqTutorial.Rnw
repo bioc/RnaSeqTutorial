@@ -53,7 +53,7 @@ In the second part, we will see how this process can be simplified by
 the use of the \Rpackage{easyRNASeq} package \citep{Delhomme:2012p4678} and how more advanced
 pre-processing can be performed, such as \emph{de-multiplexing},
 \emph{RPKM} ``correction'' or normalization using the \Rpackage{DESeq}
-or \Rpackage{edgeR} packages. 
+or \Rpackage{edgeR} packages.
 \newline
 
 Finally, the count information will be exported as bed and wig
@@ -71,7 +71,7 @@ converted to a similar \Robject{object}. Then, the reads contained in
 the \Robject{reads} object are summarized per genic annotation
 contained in the \Robject{annotation} object. This give raise to a
 count table that, finally, can be normalized using additional R
-packages. 
+packages.
 
 \begin{figure}[htpb]
 \centerline{\includegraphics[width=0.80\textwidth]{RnaSeqProcess.png}}
@@ -95,7 +95,7 @@ need to load the tutorial library and data.
 
 <<Lood the tutorial library>>=
 library(RnaSeqTutorial)
-@ 
+@
 
 \newpage
 
@@ -115,7 +115,7 @@ color-space). First, an Illumina ``export'' file produced by a GenomeAnalyzer
 GAIIx will be read in; and then the same data set, in BAM format.
 \subparagraph{Illumina export}
 The export file is read in using the \Rfunction{readAligned} function,
-and the resulting object displayed. 
+and the resulting object displayed.
 
 <<Read the data, eval=TRUE>>=
 library(ShortRead)
@@ -123,7 +123,7 @@ aln<-readAligned(
                  system.file("extdata",package="RnaSeqTutorial"),
                  pattern="subset_export",type="SolexaExport")
 show(aln)
-@ 
+@
 
 \emph{N.B.}: The \Rfunction{system.file} retrieves the file path where
 a package was installed. Additional argument can be provided in a
@@ -142,7 +142,7 @@ width(aln)[1:100]
 strand(aln)[1:100]
 sread(aln)
 quality(aln)
-@ 
+@
 
 The Illumina ``export'' format contains every read sequenced on the
 platform, as well as these coming from overlapping sequence
@@ -151,7 +151,7 @@ a \emph{chastity filter}. It is important for processing such ``raw''
 data to remove these reads. This will be done in the next section:
 \ref{sec:filt}, page \pageref{sec:filt}. First, we will just find out the value of the chastity
 filter field (``Y'' or ``N'' whether it passes the filter or not)
-within the current object: 
+within the current object:
 
 <<The chastity field, eval=FALSE>>=
 alignData(aln)$filtering[1:100]
@@ -171,7 +171,7 @@ done using the ``samtools'' command in a terminal, or using the
 Rsamtools package that implements in R most of the ``samtools'' and
 ``bcftools'' functionalities. In the following example, you will first
 create an index for the BAM file and then read the data into an
-\Rclass{AlignedRead} class object. 
+\Rclass{AlignedRead} class object.
 
 <<Indexing a BAM file with ShortRead, eval=TRUE>>=
 library(Rsamtools)
@@ -186,7 +186,7 @@ basename(indexFile)
 
 <<Reading a bam file>>=
 aln2 <- readAligned(getwd(),pattern="subset.bam$",type="BAM")
-@ 
+@
 
 \textbf{Q1}: What differences exists between the \Robject{aln} and \Robject{aln2} objects?
 \label{question1}
@@ -198,7 +198,7 @@ aln2 <- readAligned(getwd(),pattern="subset.bam$",type="BAM")
 \paragraph{Rsamtools}
 A different, more flexible way to load BAM formatted files is to
 directly use the \Rfunction{scanBam} function from the
-\Rpackage{Rsamtools} package. 
+\Rpackage{Rsamtools} package.
 
 <<Loading a file using Rsamtools>>=
 aln2b <- scanBam(
@@ -206,7 +206,7 @@ aln2b <- scanBam(
                  index="subset.bam"
                  )
 names(aln2b[[1]])
-@ 
+@
 
 \emph{N.B.} First, the \emph{index} argument is the filename, \emph{i.e.} the ``.bai''
 extension is ignored. Second, \Rfunction(scanBam) returns a list of
@@ -240,7 +240,7 @@ aln3 <- readGAlignments(
                         system.file("extdata",
                                     "gapped.bam",
                                     package="RnaSeqTutorial"))
-@ 
+@
 
 The generated object of class \Rclass{GAlignments}, is very
 different from the \Rclass{AlignedRead} class objects you have seen so
@@ -268,7 +268,7 @@ the \Rclass{AlignedRead} object contains no valid information.
 
 <<missing ids>>=
 head(id(aln))
-@ 
+@
 
 The \emph{withMultiplexIndex}, \emph{withPairedReadNumber},
 \emph{withId} and \emph{withAll} arguments offer the possibility to retrieve
@@ -279,7 +279,7 @@ aln4<-readAligned(
                   pattern="subset_export",type="SolexaExport",
                   withId=TRUE)
 head(id(aln4))
-@ 
+@
 
 \subparagraph{BAM}
 In a BAM file, the reads are stored as they are aligned against the
@@ -292,7 +292,7 @@ sel <- !is.na(strand(aln2)) & strand(aln2) %in% "-"
 aln2b[[1]]$seq[sel][1]
 sread(aln2[sel])[1]
 reverseComplement(aln2b[[1]]$seq[sel][1])
-@ 
+@
 
 \paragraph{Conclusion}
 
@@ -325,11 +325,11 @@ chrFilt <- chromosomeFilter(regex="chr")
 cFilt <- chastityFilter()
 filt <- compose(nFilt,chrFilt,cFilt)
 aln <- aln[filt(aln)]
-@ 
+@
 
 \begin{comment}
   We do not depend on easyRNASeq, so we cannot expect to be able to
-  load the library. easyRNASeq depends on RnaSeqTutorial and we do not 
+  load the library. easyRNASeq depends on RnaSeqTutorial and we do not
   want cyclic dependencies.
 \end{comment}
 
@@ -339,20 +339,20 @@ chrFilt <- chromosomeFilter(regex="chr")
 filt <- compose(nFilt,chrFilt)
 aln <- aln[filt(aln)]
 aln <- aln[alignData(aln)$filtering=="Y"]
-@ 
+@
 
 <<the filtered aln, eval=FALSE>>=
 show(aln)
-@ 
+@
 
 We are now left with 56,883 ``valid'' reads, which we want to assign
 to their respective exon. For this we need to get the proper genomic
-and genic information. 
+and genic information.
 
 <<cleanup, eval=TRUE, echo=FALSE>>=
 rm(aln2,aln2b,aln3,aln4)
 silent<-gc(verbose=FALSE)
-@ 
+@
 
 \paragraph{Conclusion}
 
@@ -362,7 +362,7 @@ genome. Now, we want to discover if these loci covered by reads
 corresponds to interesting genomic or genic features, \emph{e.g.}
 exons, promoters, \emph{etc.}. To achieve this, we first need to load
 the genic/genomic annotation in R. This will be the topic of the next
-subsection. 
+subsection.
 
 \newpage
 
@@ -383,7 +383,7 @@ will use the \Rpackage{BSgenome} package for this.
 library(BSgenome.Dmelanogaster.UCSC.dm3)
 chrSizes <-seqlengths(Dmelanogaster)
 chrSizes
-@ 
+@
 
 \paragraph{Genic information}
 To retrieve the genic annotation, several solutions are available:
@@ -444,7 +444,7 @@ exon.annotation<-getBM(
                        mart=ensembl,
                        filters="chromosome_name",
                        values=c("2L","2R","3L","3R","4","X"))
-@ 
+@
 
 As mentioned, the obtained \Robject{data.frame} needs to be converted
 into an object of class \Rclass{RangedData} or \Rclass{GRanges}. Note
@@ -472,9 +472,9 @@ exon.range <- RangedData(
 
 This created a \Rclass{RangedData} class object.
 
-<<Check the objects, eval=FALSE>>= 
+<<Check the objects, eval=FALSE>>=
 show(exon.range)
-@ 
+@
 
 \textbf{Q4}: How would you create a \Rclass{GRanges} object?
 \label{question4}
@@ -494,7 +494,7 @@ library(genomeIntervals)
 gInterval<-readGff3(system.file("extdata",
                                 "annot.gff",
                                 package="RnaSeqTutorial"))
-@ 
+@
 
 As for \Rpackage{biomaRt}, post-processing the obtained object is
 necessary. The gff file has been retrieved from \emph{FlyBase} and
@@ -517,7 +517,7 @@ exon.range2 <- RangedData(
                             getGffAttribute(gInterval,"ID")),
                           universe = "Dm3"
                           )
-@ 
+@
 
 \textbf{Q5}: How would you create a \Rclass{GRanges} object from the \Robject{gInterval}?
 \label{question5}
@@ -537,7 +537,7 @@ exon.range3<-import.gff3(
                                 "annot.gff",
                                 package="RnaSeqTutorial")
                     )
-@ 
+@
 
 \subparagraph{GenomicFeatures}
 
@@ -550,7 +550,7 @@ object that can be queried using the \Rfunction{transcript},
 
 <<importing with GenomicFeatures, eval=FALSE>>=
 library(GenomicFeatures)
-@ 
+@
 
 <<GenomicFeature taste, eval=FALSE>>=
 dm3.tx <- makeTranscriptDbFromUCSC(
@@ -558,7 +558,7 @@ dm3.tx <- makeTranscriptDbFromUCSC(
                                    tablename="refGene")
 exon.range4 <- exons(dm3.tx)
 exon.range4
-@ 
+@
 
 As you can see a certain amount of warnings are raised and the actual
 annotation looks different (somewhat less complete) than the previous
@@ -586,7 +586,7 @@ and this requires to check and validate you annotation.
 <<clean, echo=FALSE, eval=TRUE>>=
 rm(exon.range,exon.range3,gInterval,ensembl,exon.annotation,sel)
 silent<-gc(verbose=FALSE)
-@ 
+@
 
 \newpage
 
@@ -601,7 +601,7 @@ interest.
 
 <<Genomic coverage, eval=TRUE>>=
 cover <- coverage(aln,width=chrSizes)
-@ 
+@
 
 <<Have a look at the coverage, eval=FALSE>>=
 show(cover)
@@ -628,7 +628,7 @@ it is the smallest.
 \newline
 The \Rclass{Rle} class derives from the \Rclass{Sequence} one and
 therefore has numerous capabilities. The following example display
-some: 
+some:
 
 <<Additional commands for cov, eval=TRUE>>=
 runLength(cover$chr4)[1:3]
@@ -656,7 +656,7 @@ the genic annotation retrieved previously. The coverage object:
 \Robject{cover} we have generated earlier  describes the number of
 reads overlapping every bp in the genome. To summarize its values per
 exon, the simplest approach is to average the coverage for all bp covered
-by a given exon. 
+by a given exon.
 
 <<Exon Transcript coverage, eval=TRUE>>=
 exon.coverage<-aggregate(
@@ -665,11 +665,11 @@ exon.coverage<-aggregate(
                          sum)
 
 exon.coverage <- ceiling(exon.coverage/unique(width(aln)))
-@ 
+@
 
 <<Ex. tr. cov.p.2, eval=FALSE>>=
 show(exon.coverage)
-@ 
+@
 
 \subparagraph{Tip}
 Using Views actually make this approach much faster:
@@ -678,12 +678,12 @@ viewSums(
          Views(
                cover[match(names(exon.range2),names(cover))],
                ranges(exon.range2)))
-@ 
+@
 
 \subparagraph{Caveats}
 
 Note the \Rfunction{match} that is done between the
-\Robject{names(exon.range2)} and \Robject{names(cover)}. 
+\Robject{names(exon.range2)} and \Robject{names(cover)}.
 \newline
 \newline
 \textbf{Q9}: Why is it so \textbf{essential}?
@@ -707,12 +707,12 @@ in mind that getting the proper annotation for your analysis is an
 essential step, as well when using the \Rpackage{easyRNASeq}
 package \citep{Delhomme:2012p4678}. You'll probably want to avoid
 counting the same read multiple times, \textit{e.g.} in overlapping
-exons. 
+exons.
 
 <<clean up, echo=FALSE>>=
 rm(aln,chrSizes)
 silent<-gc(verbose=FALSE)
-@ 
+@
 
 \newpage
 
@@ -739,7 +739,7 @@ count.table <- easyRNASeq(system.file(
                                       "extdata",
                                       package="RnaSeqTutorial"),
                           organism="Dmelanogaster",
-                          chr.sizes=as.list(seqlengths(Dmelanogaster)),
+                          chr.sizes=seqlengths(Dmelanogaster),
                           readLength=36L,
                           annotationMethod="rda",
                           annotationFile=system.file(
@@ -749,19 +749,19 @@ count.table <- easyRNASeq(system.file(
                           format="bam",
                           count="exons",
                           pattern="[A,C,T,G]{6}\\.bam$")
-@ 
+@
 
 <<Show, eval=FALSE>>=
 head(count.table)
 dim(count.table)
-@ 
+@
 
 That is all. In one command, you got the count table for your 4 samples!
 
 \paragraph{Warnings}
 \label{p:W}
 As you could see when running the previous example,  warnings were
-emitted and quite rightly so. 
+emitted and quite rightly so.
 \begin{enumerate}
 \item about the annotation:
 The annotation we are using here is
@@ -789,7 +789,7 @@ issue.
 
 \paragraph{Details}
 The \Rfunction{easyRNASeq} function currently accepts the following
-\Robject{annotationMethods}: 
+\Robject{annotationMethods}:
 \begin{itemize}
   \item ``biomaRt'' use biomaRt to retrieve the annotation
   \item ``env'' use a \Rclass{RangedData} class object present in the environment
@@ -803,7 +803,7 @@ The reads can be read in from BAM files or any format supported by \Rpackage{Sho
 
 The reads can be summarized by:
 \begin{itemize}
-  \item exons 
+  \item exons
   \item features (any features such as introns, enhancers, \emph{etc.})
   \item transcripts
   \item geneModels (a geneModel is the set of non overlapping loci
@@ -838,12 +838,12 @@ package capabilities, have a look at the \Rpackage{easyRNASeq} vignette.
 
 <<open the vignette, eval=FALSE>>=
 vignette("easyRNASeq")
-@ 
+@
 
 The obtained results can optionally be normalized as \emph{Reads per Kilobase
   of feature per Million reads in the library} (RPKM,
 \cite{Mortazavi:2008p740}) or using the \Rpackage{DESeq} or
-\Rpackage{edgeR} packages. 
+\Rpackage{edgeR} packages.
 \newline
 \newline
 \textbf{Q12}: From the same input files and annotations, generate an object of
@@ -891,7 +891,7 @@ head(RPKM(count.table,NULL,
 @
 
 \textbf{Q14}: Do the same for the object created at the \textbf{Q12}
-and \textbf{Q13} for every possible counts. 
+and \textbf{Q13} for every possible counts.
 \label{question14}
 \newline
 \newline
@@ -900,7 +900,7 @@ sub-optimal for further analyses . A better way of normalizing the
 data is to use either the \Rpackage{edgeR} or \Rpackage{DESeq}
 packages, provided you have got enough (biological) replicates. Refer
 to the \Rpackage{easyRNASeq}, the \Rpackage{DESeq} and the
-\Rpackage{edgeR} vignettes. 
+\Rpackage{edgeR} vignettes.
 
 
 \textbf{Q15}: Perform the examples in the \Rpackage{easyRNASeq} vignette paragraph 3.7.
@@ -935,7 +935,7 @@ This part of the tutorial is now in the \Rpackage{easyRNASeq} vignette paragraph
 Before performing any more advanced analyses, it is crucial to be able
 to visualize the data. Many technical or procedural problems can be
 identified and resolved, making the residual filtered data of better
-quality. 
+quality.
 \newline
 The \Rpackage{rtracklayer} library provides the necessary
 functionalities to export data stored in \Rclass{GenomicData} and
@@ -952,7 +952,7 @@ problematic since, if you have a step of 50bp and want a span of 50
 bp, you'd need a chromosome whose size is a multiple of 50bp. Luckily
 the chromosome size is not enforced by Genome Browsers, so a small
 hack (5th line) does it (actually it is useless here as the chromosome
-4 size is a natural multiple of the selected window size). 
+4 size is a natural multiple of the selected window size).
 
 <<Chromosome 4 wig export, eval=FALSE>>=
 library(rtracklayer)
@@ -964,7 +964,7 @@ silent <- export(
                  RangedData(rngs,score=vals,universe="Dmelanogaster",space="chr4"),
                  con="chr4.wig"
                  )
-@ 
+@
 
 \subsection{exporting the normalized exon counts}
 
@@ -1000,7 +1000,7 @@ exons$score <- exon.RPKM[,1]
 exons$name <- rownames(exon.RPKM)
 exons <- exons[exons$score>0,]
 export(exons,con="exons.bed")
-@ 
+@
 
 \subsection{conclusion}
 
@@ -1032,7 +1032,7 @@ silent <- sapply(
                  function(f2c){
                    if(file.exists(f2c)){file.remove(f2c)}
                  })
-@ 
+@
 
 New protocols, new packages are constantly being developed; making
 pre-processing NGS data a moving target. For example, it is known that
@@ -1098,12 +1098,12 @@ does not contain any sequence, quality or id information.
 using the \Rfunction{ngap} function gives you the number of
 alignment having a gap, but not the size of that gap. This can be
 accessed using the \Rfunction{cigarOpTable} and \Rfunction{cigar} as
-in the example below: 
-  
+in the example below:
+
 <<solution 3, eval=FALSE>>=
 table(ngap(aln3))
 table(cigarOpTable(cigar(aln3))[,"N"])
-@ 
+@
 
 \item \textbf{Q4}: section \ref{question4}, page \pageref{question4}: using the \Rfunction{GRanges}
 constructor as follow:
@@ -1122,7 +1122,7 @@ exon.grange <- GRanges(
                               unique(exon.annotation$chromosome),
                               names(chrSizes))]
                        )
-@ 
+@
 
 \item \textbf{Q5}: section \ref{question5}, page \pageref{question5}: using the \Rfunction{GRanges}
 constructor as follow:
@@ -1145,7 +1145,7 @@ exon.grange2 <- GRanges(
                                 unique(gInterval$seq_name),
                                 names(chrSizes))]
                           )
-@ 
+@
 
 \item \textbf{Q6}: section \ref{question6}, page \pageref{question6}: using the
 \Rpackage{rtracklayer} package, specifically the
@@ -1162,13 +1162,13 @@ load(system.file("data",
 export.gff3(gAnnot,con="annot.gff")
 export.gff(gAnnot,con="annot.gff",version="3")
 export(gAnnot,con="annot.gff",version="3")
-@ 
+@
 
 \item \textbf{Q7}: section \ref{question7}, page \pageref{question7}: simply coerce the
 \Rclass{Rle} class object into an integer.
 
 <<solution7, eval=FALSE>>=
-as.integer(cover$chr4) 
+as.integer(cover$chr4)
 @
 
 
@@ -1191,7 +1191,7 @@ than sorry.
 names(exon.range2)
 names(cover)
 match(names(exon.range2),names(cover))
-@ 
+@
 
 \item \textbf{Q10}: section \ref{question10}, page \pageref{question10}: The main drawback is an
 edge effect; \emph{i.e.} reads that are spanning the exon boundaries,
@@ -1221,7 +1221,7 @@ exon.counts <- countOverlaps(
                                            width=width(aln)),
                                    chromosome(aln))
                              )
-@ 
+@
 
 We might want to compare that result with the former one, stored in
 the \Robject{exon.coverage}.
@@ -1238,7 +1238,7 @@ plot(
 abline(0,1,lty=2,col="orange")
 
 table(unlist(exon.coverage) - unlist(exon.counts))
-@ 
+@
 
 As you can see, the difference is not striking.
 
@@ -1262,7 +1262,7 @@ rnaSeq <- easyRNASeq(system.file(
                      pattern="bam$",
                      outputFormat="RNAseq")
 show(rnaSeq)
-@ 
+@
 
 \item \textbf{Q13}: section \ref{question13}, page \pageref{question13}: use the
 \Rfunction{transcriptCounts}, \Rfunction{geneCounts} to generate the
@@ -1271,7 +1271,7 @@ counts and \Rfunction{readCounts} to access the results.
 <<Transcript counts, eval=FALSE>>=
 rnaSeq <- transcriptCounts(rnaSeq)
 head(readCounts(rnaSeq,'transcripts'))
-@ 
+@
 
 Summarizing by transcript introduces some complexity in the data
 analysis, \emph{i.e.} exons part of different isoforms introduce a
@@ -1299,11 +1299,11 @@ purpose.
 
 <<solution13, eval=FALSE>>=
 rnaSeq<-geneCounts(rnaSeq,summarization='geneModels')
-@ 
+@
 
 This behavior will be corrected in the next release. At the moment,
 this has to be done using the \Rfunction{easyRNASeq} function
-directly. 
+directly.
 
 <<solution13B, eval=FALSE>>=
 rnaSeq2 <- easyRNASeq(system.file(
@@ -1330,11 +1330,11 @@ head(readCounts(rnaSeq2,'genes','geneModels'))
 <<solution14,eval=FALSE>>=
 RPKM(rnaSeq,from="transcripts")
 RPKM(rnaSeq2,from="geneModels")
-@ 
+@
 
 \item \textbf{Q15}: Explanations are in the \Rpackage{easyRNASeq}
   package vignette.
-  
+
 \item \textbf{Q16}: Explanations are in the \Rpackage{easyRNASeq}
   package vignette.
 
@@ -1346,12 +1346,12 @@ accessible through:
 
 <<solution17,eval=FALSE>>=
 alignData(alns)$multiplexIndex
-@ 
+@
 
 To view all the possible fields, do:
 <<solution17b, eval=FALSE>>=
 varLabels(alignData(alns))
-@ 
+@
 
 \end{itemize}
 
@@ -1389,16 +1389,16 @@ varLabels(alignData(alns))
 % % islands <- readCounts(rnaSeq,'islands')
 % % % find the loci of the most expressed island
 % % big.island <- readIslands(rnaSeq)[
-% % 	readIslands(rnaSeq)$names %in% 
+% % 	readIslands(rnaSeq)$names %in%
 % % 	names(sort(islands[[1]],decreasing=TRUE)[1]),]
 % % % what is the island size?
 % % width(big.island)
 % % start(big.island)
-% % @ 
+% % @
 
 % This locus is occupied by the gene \emph{MCPH1}, putatively involved
 % in development, fact that fits with the nature of the sample extracted
-% from drosophila embryos. 
+% from drosophila embryos.
 
 % All together, this is still work in progress and functionalities still
 % need to be added, in particular when dealing with multiple samples,
@@ -1411,7 +1411,7 @@ varLabels(alignData(alns))
 % \end{comment}
 
 % @article{Ameur:2010p280,
-% author = {Adam Ameur and Anna Wetterbom and Lars Feuk and Ulf Gyllensten}, 
+% author = {Adam Ameur and Anna Wetterbom and Lars Feuk and Ulf Gyllensten},
 % journal = {Genome Biology 2010 11:202},
 % title = {Global and unbiased detection of splice junctions from RNA-Seq data},
 % abstract = {ABSTRACT: We have developed a new strategy for de novo prediction of splice junctions in short read RNA-Seq data, suitable for detection of novel splicing events and chimeric transcripts. When tested on mouse RNA-Seq data, over 31,000 splice events were predicted, of which 88% bridged between two regions separated by at most 100 kb, and 74% connected two exons of the same RefSeq gene. Our method also reports genomic rearrangements such as insertions and deletions.},
@@ -1423,7 +1423,7 @@ varLabels(alignData(alns))
 % }
 
 % @article{Zerbino:2008p749,
-% author = {Daniel R Zerbino and Ewan Birney}, 
+% author = {Daniel R Zerbino and Ewan Birney},
 % journal = {Genome Research},
 % title = {Velvet: algorithms for de novo short read assembly using de Bruijn graphs},
 % abstract = {We have developed a new set of algorithms, collectively called "Velvet," to manipulate de Bruijn graphs for genomic sequence assembly. A de Bruijn graph is a compact representation based on short words (k-mers) that is ideal for high coverage, very short read (25-50 bp) data sets. Applying Velvet to very short reads and paired-ends information only, one can produce contigs of significant length, up to 50-kb N50 length in simulations of prokaryotic data and 3-kb N50 on simulated mammalian BACs. When applied to real Solexa data sets without read pairs, Velvet generated contigs of approximately 8 kb in a prokaryote and 2 kb in a mammalian BAC, in close agreement with our simulated results without read-pair information. Velvet represents a new approach to assembly that can leverage very short reads in combination with read pairs to produce useful assemblies.},
