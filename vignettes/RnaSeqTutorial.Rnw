@@ -157,21 +157,21 @@ within the current object:
 alignData(aln)$filtering[1:100]
 @
 
+\paragraph{Rsamtools}
+
 \subparagraph{BAM}
 
-The SAM/BAM format \citep{Li:2009p1662} is becoming a \emph{de-facto}
+The SAM/BAM format \citep{Li:2009p1662} is a \emph{de-facto}
 standard for storing NGS aligned data. As a consequence, the
 \Rpackage{Rsamtools} was developed to import the \emph{samtools}
-functionalities into the R environment. Subsequently, the
-\Rpackage{ShortRead} package was extended to use \Rpackage{Rsamtools}
-to load BAM files. SAM/BAM files can be sorted by chromosomal
+functionalities into the R environment. SAM/BAM files can be sorted by chromosomal
 position, in which case an index can be created that will improve the
 subsequent retrieval of information within the BAM file. This can be
 done using the ``samtools'' command in a terminal, or using the
 Rsamtools package that implements in R most of the ``samtools'' and
 ``bcftools'' functionalities. In the following example, you will first
-create an index for the BAM file and then read the data into an
-\Rclass{AlignedRead} class object.
+create an index for the BAM file and then read the data using
+\Rpackage{Rsamtools}.
 
 <<Indexing a BAM file with ShortRead, eval=TRUE>>=
 library(Rsamtools)
@@ -184,19 +184,7 @@ indexFile <- indexBam("subset.bam")
 basename(indexFile)
 @
 
-<<Reading a bam file>>=
-aln2 <- readAligned(getwd(),pattern="subset.bam$",type="BAM")
-@
-
-\textbf{Q1}: What differences exists between the \Robject{aln} and \Robject{aln2} objects?
-\label{question1}
-\newline
-\newline
-\textbf{Answers} are provided in the Appendix \ref{apdxA}, page \pageref{apdxA}.
-
-
-\paragraph{Rsamtools}
-A different, more flexible way to load BAM formatted files is to
+A flexible way to load BAM formatted files is to
 directly use the \Rfunction{scanBam} function from the
 \Rpackage{Rsamtools} package.
 
@@ -281,19 +269,6 @@ aln4<-readAligned(
 head(id(aln4))
 @
 
-\subparagraph{BAM}
-In a BAM file, the reads are stored as they are aligned against the
-reference genome! Hence, these are not necessarily the ``sequence''
-that have been read by the sequencer. The \Rpackage{ShortRead}, when
-loading a BAM file revert the reads to their original sequence.
-
-<<BAM read conversion>>=
-sel <- !is.na(strand(aln2)) & strand(aln2) %in% "-"
-aln2b[[1]]$seq[sel][1]
-sread(aln2[sel])[1]
-reverseComplement(aln2b[[1]]$seq[sel][1])
-@
-
 \paragraph{Conclusion}
 
 In that section, we have seen three packages that allow loading NGS
@@ -350,7 +325,7 @@ to their respective exon. For this we need to get the proper genomic
 and genic information.
 
 <<cleanup, eval=TRUE, echo=FALSE>>=
-rm(aln2,aln2b,aln3,aln4)
+rm(aln2b,aln3,aln4)
 silent<-gc(verbose=FALSE)
 @
 
@@ -493,10 +468,11 @@ files too.
 library(genomeIntervals)
 gInterval<-readGff3(system.file("extdata",
                                 "annot.gff",
-                                package="RnaSeqTutorial"))
+                                package="RnaSeqTutorial"),
+                    quiet=TRUE)
 @
 
-As for \Rpackage{biomaRt}, post-processing the obtained object is
+As for \Rpackage{biomaRt}, coercing the obtained object is
 necessary. The gff file has been retrieved from \emph{FlyBase} and
 filtered for the ``exon'' type. It contains the \textit{gffAttributes}
 \textit{ID}, \textit{Name} and \textit{Parent} defining the
@@ -553,9 +529,9 @@ library(GenomicFeatures)
 @
 
 <<GenomicFeature taste, eval=FALSE>>=
-dm3.tx <- makeTranscriptDbFromUCSC(
-                                   genome="dm3",
-                                   tablename="refGene")
+dm3.tx <- makeTxDbFromUCSC(
+  genome="dm3",
+  tablename="refGene")
 exon.range4 <- exons(dm3.tx)
 exon.range4
 @
@@ -584,7 +560,7 @@ some possible bias. It is obviously important to avoid such behavior
 and this requires to check and validate you annotation.
 
 <<clean, echo=FALSE, eval=TRUE>>=
-rm(exon.range,exon.range3,gInterval,ensembl,exon.annotation,sel)
+rm(exon.range,gInterval,ensembl,exon.annotation)
 silent<-gc(verbose=FALSE)
 @
 
@@ -1087,9 +1063,8 @@ comments and patience, as well as for organizing the course.
 
 \begin{itemize}
 
-\item \textbf{Q1}: section \ref{question1}, page \pageref{question1}: The \Robject{aln} and
-\Robject{aln2} objects differs by their number of reads. In the
-\Robject{aln2}, the \emph{chastity filtered} reads have been ignored.
+\item \textbf{Q1}: There is indeed no Q1, no need to look for it.
+It has been removed for Bioc 3.2.
 
 \item \textbf{Q2}: section \ref{question2}, page \pageref{question2}: The \Robject{aln3}, of class
 \Rclass{GAlignments} from the \Rpackage{GenomicAlignments} package
@@ -1146,6 +1121,16 @@ exon.grange2 <- GRanges(
                                 unique(gInterval$seq_name),
                                 names(chrSizes))]
                           )
+@
+
+or simply:
+<<solution 5b, eval=FALSE>>=
+exon.grange2 <- as(gInterval,"GRanges")
+@
+
+which means that a \Rclass{RangedData} object can be obtained as:
+<<solution 5c, eval=FALSE>>=
+as(as(gInterval,"GRanges"),"RangedData")
 @
 
 \item \textbf{Q6}: section \ref{question6}, page \pageref{question6}: using the
