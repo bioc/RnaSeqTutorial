@@ -1,6 +1,6 @@
 Package: RnaSeqTutorial
 Title: RNA-Seq Tutorial (EBI Cambridge UK, October 2011)
-Version: 0.12.0
+Version: 0.13.0
 Date: 2015-10-05
 Author: Nicolas Delhomme, Ismael Padioleau
 Description: A selection of RNA-Seq data to get familiar with the related Bioconductor core packages and the easyRNASeq package.
