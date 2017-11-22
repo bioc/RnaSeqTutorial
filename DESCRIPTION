@@ -1,6 +1,6 @@
 Package: RnaSeqTutorial
 Title: RNA-Seq Tutorial (EBI Cambridge UK, October 2011)
-Version: 0.17.0
+Version: 0.17.1
 Date: 2015-10-05
 Author: Nicolas Delhomme, Ismael Padioleau
 Description: A selection of RNA-Seq data to get familiar with the related Bioconductor core packages and the easyRNASeq package.
@@ -10,3 +10,4 @@ Depends: R (>= 3.0.2), methods, easyRNASeq
 Suggests: Rsamtools, ShortRead, BSgenome.Dmelanogaster.UCSC.dm3,
           GenomicAlignments, biomaRt, genomeIntervals
 biocViews: ExperimentData, Drosophila_melanogaster_Data, RNASeqData
+PackageStatus: Deprecated
